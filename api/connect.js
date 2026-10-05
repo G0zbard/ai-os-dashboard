@@ -2,7 +2,6 @@ const KEY=process.env.COMPOSIO_API_KEY;
 const APP_USER_ID=process.env.COMPOSIO_APP_USER_ID||'default';
 const ACCOUNTS='https://backend.composio.dev/api/v3.1/connected_accounts';
 const LINKS='https://backend.composio.dev/api/v3.1/connected_accounts/link';
-
 const TOOLKIT_BY_PROVIDER={gmail:'gmail',drive:'googledrive'};
 
 function err(value,fallback){
@@ -20,6 +19,11 @@ async function jsonFetch(url,options={}){
   return j;
 }
 
+function toolkitSlug(account){
+  const t=account?.toolkit;
+  return String(t?.slug||t?.name||account?.toolkit_slug||'').toLowerCase();
+}
+
 export default async function handler(req,res){
   if(req.method!=='GET') return res.status(405).json({error:'GET only'});
   if(!KEY) return res.status(503).json({configured:false,error:'COMPOSIO_API_KEY is not configured'});
@@ -29,8 +33,10 @@ export default async function handler(req,res){
 
   try{
     const accounts=await jsonFetch(ACCOUNTS+'?limit=100');
-    const existing=(accounts.items||[]).find(a=>a?.toolkit?.slug===toolkit&&a?.auth_config?.id);
-    if(!existing?.auth_config?.id) throw new Error('Auth config introuvable pour '+toolkit);
+    const existing=(accounts.items||[]).find(a=>toolkitSlug(a)===toolkit&&a?.auth_config?.id);
+    if(!existing?.auth_config?.id){
+      return res.status(502).json({error:'Auth config introuvable pour '+toolkit,available:(accounts.items||[]).map(a=>({toolkit:toolkitSlug(a),auth_config_id:a?.auth_config?.id||null}))});
+    }
     const link=await jsonFetch(LINKS,{method:'POST',body:JSON.stringify({
       auth_config_id:existing.auth_config.id,
       user_id:APP_USER_ID,
