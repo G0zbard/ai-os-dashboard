@@ -17,13 +17,13 @@ function asError(value,fallback){
 
 async function getUserId(account){
   if(userCache.has(account)) return userCache.get(account);
-  const url=ACCOUNTS+'?connected_account_ids='+encodeURIComponent(account)+'&limit=1';
+  const url=ACCOUNTS+'?limit=100';
   const r=await fetch(url,{headers:{'x-api-key':KEY,'accept':'application/json'}});
   const raw=await r.text();
   let j={};
   try{j=raw?JSON.parse(raw):{}}catch{j={message:raw||'Réponse non JSON'};}
-  if(!r.ok) throw new Error(asError(j.error||j,'Composio connected accounts '+r.status));
-  const item=(j.items||[])[0];
+  if(!r.ok) throw new Error(asError(j.error||j,'Composio connected accounts HTTP '+r.status));
+  const item=(j.items||[]).find(x=>x&&x.id===account);
   if(!item?.user_id) throw new Error('Composio connected account: user_id introuvable');
   userCache.set(account,item.user_id);
   return item.user_id;
