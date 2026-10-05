@@ -8,18 +8,19 @@
 <title>AI OS</title>
 <style>
 :root{--bg:#090b10;--panel:#11151d;--panel2:#0d1118;--border:#252b38;--text:#f5f7fb;--muted:#8993a5;--accent:#7c8cff;--green:#43d17d;--red:#ff6b7a;--warn:#ffcf6a}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% 0,#1b2037,#090b10 42%);color:var(--text);font:14px system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input{font:inherit}.app{min-height:100vh;display:flex}.side{width:230px;background:#0b0d12;border-right:1px solid var(--border);padding:22px 14px;display:flex;flex-direction:column}
-.brand{font-size:21px;font-weight:800;padding:0 10px 22px}.brand i{color:var(--accent);font-style:normal}.nav{display:grid;gap:5px}.nav button,.mobile button{border:0;background:none;color:var(--muted);padding:11px;border-radius:10px;text-align:left;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover,.mobile button.active{background:#171b27;color:var(--text)}
+*{box-sizing:border-box}html,body{min-height:100%;overflow-x:hidden}body{margin:0;background:radial-gradient(circle at 70% 0,#1b2037,#090b10 42%);color:var(--text);font:14px system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}.app{min-height:100vh;display:flex;align-items:stretch}.side{width:230px;flex:0 0 230px;min-width:230px;background:#0b0d12;border-right:1px solid var(--border);padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:50}
+.brand{font-size:21px;font-weight:800;padding:0 10px 22px}.brand i{color:var(--accent);font-style:normal}.nav{display:grid;gap:5px;position:relative;z-index:60}.nav button,.mobile button{border:0;background:none;color:var(--muted);padding:11px;border-radius:10px;text-align:left;font-size:14px;cursor:pointer;position:relative;z-index:61;touch-action:manipulation}.nav button.active,.nav button:hover,.mobile button.active{background:#171b27;color:var(--text)}
 .sync{margin-top:auto;border:1px solid var(--border);border-radius:13px;padding:12px;color:var(--muted);font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:7px}
-.main{width:100%;max-width:1500px;margin:auto;padding:24px 13px}.top{display:flex;gap:12px;margin-bottom:18px}.cmd{flex:1;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:14px;padding:15px 17px;font-size:15px;outline:0}.cmd:focus{border-color:var(--accent);box-shadow:0 0 0 3px #7c8cff22}
-.cmdBtn{border:1px solid var(--border);background:var(--accent);color:#fff;border-radius:12px;padding:0 18px;font-weight:700;cursor:pointer}.hero{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.hero h1{font-size:34px;margin:0 0 5px}.hero p{margin:0;color:var(--muted)}
-.live{padding:6px 10px;border:1px solid #284438;border-radius:99px;color:#8be3ad;font-size:12px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:rgba(17,21,29,.92);border:1px solid var(--border);border-radius:16px;padding:17px;min-width:0}.kpi{grid-column:span 3}.wide{grid-column:span 8}.small{grid-column:span 4}.full{grid-column:1/-1}
+.main{flex:1 1 auto;width:auto;max-width:none;min-width:0;margin:0;padding:24px 13px}.top{display:flex;gap:12px;margin-bottom:18px}.cmd{flex:1;min-width:0;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:14px;padding:15px 17px;font-size:15px;outline:0}.cmd:focus{border-color:var(--accent);box-shadow:0 0 0 3px #7c8cff22}
+.cmdBtn{border:1px solid var(--border);background:var(--accent);color:#fff;border-radius:12px;padding:0 18px;font-weight:700;cursor:pointer;touch-action:manipulation}.hero{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.hero h1{font-size:34px;margin:0 0 5px}.hero p{margin:0;color:var(--muted)}
+.live{padding:6px 10px;border:1px solid #284438;border-radius:99px;color:#8be3ad;font-size:12px}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.card{background:rgba(17,21,29,.92);border:1px solid var(--border);border-radius:16px;padding:17px;min-width:0}.kpi{grid-column:span 3}.wide{grid-column:span 8}.small{grid-column:span 4}.full{grid-column:1/-1}
 .label{font-size:12px;color:var(--muted)}.num{font-size:28px;font-weight:800;margin-top:7px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid #202633;background:#0e1219;border-radius:11px;margin-top:8px}.row small{color:var(--muted)}
-.pill{font-size:10px;padding:5px 8px;border-radius:99px;background:#191e29;color:#b7bfd0}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button,.ghost{border:1px solid var(--border);background:#171b24;color:var(--text);border-radius:10px;padding:9px 11px;cursor:pointer}.actions button.primary{background:var(--accent);border-color:var(--accent)}
+.pill{font-size:10px;padding:5px 8px;border-radius:99px;background:#191e29;color:#b7bfd0}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button,.ghost{border:1px solid var(--border);background:#171b24;color:var(--text);border-radius:10px;padding:9px 11px;cursor:pointer;touch-action:manipulation}.actions button.primary{background:var(--accent);border-color:var(--accent)}
 .feed{max-height:340px;overflow:auto}.chat{display:flex;flex-direction:column;gap:9px;max-height:420px;overflow:auto}.msg{padding:11px 13px;border-radius:12px;max-width:92%;white-space:pre-wrap;line-height:1.45}.user{align-self:flex-end;background:#252b36}.ai{align-self:flex-start;background:#101722;border:1px solid var(--border)}
 .section{display:none}.section.active{display:block}.mobile{display:none}.error{color:#ff9ba6;font-size:12px;margin-top:7px}.ok{color:#8be3ad}.warn{color:var(--warn)}.connect{margin-top:8px;background:#1a2130!important}.sub{color:var(--muted);font-size:12px;line-height:1.45}.empty{padding:14px;color:var(--muted);text-align:center}
-@media(max-width:850px){.side{display:none}.main{padding:14px 13px 86px}.grid{grid-template-columns:1fr}.kpi,.wide,.small,.full{grid-column:1}.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:5;background:#0c0f15;border-top:1px solid var(--border);justify-content:space-around;padding:8px 4px}.mobile button{text-align:center;font-size:11px;padding:8px}.top{position:sticky;top:0;z-index:4;background:#090b10;padding-bottom:10px}.cmdBtn{padding:0 14px}.hero h1{font-size:27px}}
+@media(min-width:851px){.main{max-width:calc(100vw - 230px)}}
+@media(max-width:850px){.side{display:none}.main{padding:14px 13px 86px}.grid{grid-template-columns:1fr}.kpi,.wide,.small,.full{grid-column:1}.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:100;background:#0c0f15;border-top:1px solid var(--border);justify-content:space-around;padding:8px 4px}.mobile button{text-align:center;font-size:11px;padding:8px}.top{position:sticky;top:0;z-index:80;background:#090b10;padding-bottom:10px}.cmdBtn{padding:0 14px}.hero h1{font-size:27px}}
 </style>
 </head>
 <body>
@@ -71,12 +72,10 @@ button,input{font:inherit}.app{min-height:100vh;display:flex}.side{width:230px;b
     </div>
   </section>
 
-  <section id="assistant" class="section"><div class="card"><h1>✦ AI Assistant</h1><p class="sub">L'assistant utilise le même moteur de commande que la barre IA. Lance une commande, puis retrouve ici l'historique.</p><div id="assistantActions" class="actions" style="margin-top:12px"><button data-cmd="Brief du jour">Brief du jour</button><button data-cmd="Résume mes mails">Résumé mails</button><button data-cmd="Agenda">Agenda</button><button data-cmd="Mes tâches">Tâches</button></div><div id="assistantChat" class="chat" style="margin-top:14px"></div></div></section>
+  <section id="assistant" class="section"><div class="card"><h1>✦ AI Assistant</h1><p class="sub">L’assistant utilise le moteur de commande connecté. Pour du raisonnement libre et du chat long, ajoute ensuite une clé de modèle dans Vercel.</p><div id="assistantActions" class="actions" style="margin-top:12px"><button data-cmd="Brief du jour">Brief du jour</button><button data-cmd="Résume mes mails">Résumé mails</button><button data-cmd="Agenda">Agenda</button><button data-cmd="Mes tâches">Tâches</button></div><div id="assistantChat" class="chat" style="margin-top:14px"></div></div></section>
 
   <section id="tasks" class="section"><div class="card"><h1>✓ Tasks</h1><p class="sub">Google Tasks — création, affichage et clôture depuis AI OS.</p><div class="actions" style="margin:12px 0"><button class="primary" data-cmd="Ajoute une tâche réviser les maths">+ Ajouter une tâche</button><button data-cmd="Mes tâches">Actualiser</button></div><div id="tasksList" class="feed"></div></div></section>
-
-  <section id="calendar" class="section"><div class="card"><h1>◷ Calendar</h1><p class="sub">Google Calendar — lecture des 7 prochains jours et création rapide d'événements.</p><div class="actions" style="margin:12px 0"><button class="primary" data-cmd="Agenda">Actualiser l'agenda</button><button data-cmd="Ajoute réunion demain à 14h">+ Créer un rendez-vous</button></div><div id="calendarList" class="feed"></div></div></section>
-
+  <section id="calendar" class="section"><div class="card"><h1>◷ Calendar</h1><p class="sub">Google Calendar — lecture des 7 prochains jours et création rapide d’événements.</p><div class="actions" style="margin:12px 0"><button class="primary" data-cmd="Agenda">Actualiser l’agenda</button><button data-cmd="Ajoute réunion demain à 14h">+ Créer un rendez-vous</button></div><div id="calendarList" class="feed"></div></div></section>
   <section id="files" class="section"><div class="card"><h1>▣ Files</h1><p class="sub">Fichiers récents Google Drive.</p><div id="files2" class="feed"></div></div></section>
   <section id="finance" class="section"><div class="card"><h1>€ Finance</h1><p class="sub">Vue finance — aucune exécution réelle activée ici.</p></div></section>
   <section id="trading" class="section"><div class="card"><h1>⌁ Trading</h1><p class="sub">Paper trading / démo uniquement — aucun ordre réel.</p></div></section>
@@ -91,101 +90,22 @@ button,input{font:inherit}.app{min-height:100vh;display:flex}.side{width:230px;b
 const $=id=>document.getElementById(id);
 const cmd=$('cmd'),chat=$('chat'),assistantChat=$('assistantChat'),syncText=$('syncText'),syncError=$('syncError'),retry=$('retry');
 const connectLabels={drive:'Google Drive',calendar:'Google Calendar',tasks:'Google Tasks',gmail:'Gmail'};
-
 function esc(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function log(text,type='ai'){
-  const d=document.createElement('div');d.className='msg '+type;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
-  const a=d.cloneNode(true);assistantChat.appendChild(a);assistantChat.scrollTop=assistantChat.scrollHeight;
-  return d;
-}
-function renderMails(rows){
-  $('mails').innerHTML=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.subject||'Sans objet')+'</b><br><small>'+esc(x.from||'')+(x.preview?' — '+esc(x.preview):'')+'</small></span><span class="pill">'+esc(x.label||'MAIL')+'</span></div>').join('')||'<div class="empty">Aucun mail.</div>';
-}
-function renderEvents(rows,targetId='events'){
-  const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.title||'Sans titre')+'</b><br><small>'+esc(x.start?new Date(x.start).toLocaleString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'')+(x.location?' · '+esc(x.location):'')+'</small></span><span class="pill">AGENDA</span></div>').join('')||'<div class="empty">Aucun événement.</div>';
-  $(targetId).innerHTML=html;
-}
-function renderTasks(rows,targetId='taskPreview'){
-  const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.title||'Sans titre')+'</b><br><small>'+esc(x.due?'Échéance : '+new Date(x.due).toLocaleDateString('fr-FR'):'')+'</small></span><button class="ghost" data-complete="'+esc(x.title||'')+'">✓</button></div>').join('')||'<div class="empty">Aucune tâche.</div>';
-  $(targetId).innerHTML=html;
-  $(targetId).querySelectorAll('[data-complete]').forEach(b=>b.onclick=()=>runCommand('Termine la tâche '+b.dataset.complete));
-}
-function renderFiles(rows){
-  const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.name||'Fichier')+'</b><br><small>'+esc(x.modified||'')+'</small></span><span class="pill">DRIVE</span></div>').join('')||'<div class="empty">Aucun fichier.</div>';
-  $('files').innerHTML=html;$('files2').innerHTML=html;
-}
-function connectBox(needs){
-  if(!needs?.length){$('connections').innerHTML='<span class="ok">● Gmail · Drive · Agenda · Tâches synchronisés</span>';return}
-  $('connections').innerHTML=needs.map(p=>'<div class="warn">⚠ '+esc(connectLabels[p]||p)+' non connecté<br><button class="ghost connect" data-connect="'+esc(p)+'">Connecter</button></div>').join('');
-  $('connections').querySelectorAll('[data-connect]').forEach(b=>b.onclick=()=>connectProvider(b.dataset.connect));
-}
-async function connectProvider(provider){
-  try{
-    const r=await fetch('/api/connect?provider='+encodeURIComponent(provider)+'&t='+Date.now(),{cache:'no-store'});const d=await r.json();
-    if(!r.ok||!d.redirect_url) throw new Error(d.error||'Lien de connexion indisponible');
-    window.open(d.redirect_url,'_blank','noopener,noreferrer');
-    log('Une fenêtre de connexion '+connectLabels[provider]+' vient de s’ouvrir. Termine l’autorisation, puis clique sur « Synchroniser ».');
-  }catch(e){log('Impossible de lancer la connexion : '+e.message)}
-}
-async function runCommand(value){
-  const q=value.trim();if(!q)return;
-  log(q,'user');cmd.value='';
-  const t=log('Analyse de la commande…','ai');
-  try{
-    const r=await fetch('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:q,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,clientNow:new Date().toISOString()})});
-    const d=await r.json();t.remove();
-    if(!r.ok){
-      if(d.connectProvider){log('Cette fonction nécessite une connexion '+connectLabels[d.connectProvider]+'.');await connectProvider(d.connectProvider);return}
-      throw new Error(d.error||'Erreur serveur');
-    }
-    log(d.message||'Commande exécutée.');
-    const data=d.data||{};
-    if(data.unread!=null)$('unread').textContent=data.unread;
-    if(data.driveCount!=null)$('drive').textContent=data.driveCount;
-    if(data.calendar!=null)$('calendarCount').textContent=data.calendar;
-    if(data.tasks!=null)$('tasksCount').textContent=data.tasks;
-    if(data.mails)renderMails(data.mails);
-    if(data.files)renderFiles(data.files);
-    if(data.events){$('calendarCount').textContent=data.events.length;renderEvents(data.events);renderEvents(data.events,'calendarList')}
-    if(data.tasks && data.tasks.length)renderTasks(data.tasks); 
-    if(data.createdTask||data.completedTask)sync();
-    if(data.createdEvent)sync();
-    await sync();
-  }catch(e){t.remove();log('Erreur : '+e.message)}
-}
-$('cmdBtn').onclick=()=>runCommand(cmd.value);
-cmd.addEventListener('keydown',e=>{if(e.key==='Enter')runCommand(cmd.value)});
-document.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>runCommand(b.dataset.cmd)));
-
-async function sync(){
-  try{
-    syncText.textContent='Synchronisation…';
-    const r=await fetch('/api/state?t='+Date.now(),{cache:'no-store'});const d=await r.json();
-    if(Number.isFinite(d.unread))$('unread').textContent=d.unread;
-    if(Number.isFinite(d.drive))$('drive').textContent=d.drive;
-    if(Number.isFinite(d.calendar))$('calendarCount').textContent=d.calendar;
-    if(Number.isFinite(d.tasks))$('tasksCount').textContent=d.tasks;
-    renderMails(d.mails||[]);renderEvents(d.events||[]);renderEvents(d.events||[],'calendarList');renderTasks(d.taskItems||[]);renderTasks(d.taskItems||[],'tasksList');renderFiles(d.driveFiles||[]);
-    connectBox(d.needsConnect||[]);
-    const errors=Object.entries(d.errors||{});
-    syncError.innerHTML=errors.map(([k,v])=>'<div class="error">'+esc(k.toUpperCase())+' : '+esc(v)+'</div>').join('');
-    retry.style.display=errors.length?'inline-block':'none';
-    syncText.textContent=d.status==='ok'?'Synchronisé à '+new Date(d.updatedAt).toLocaleTimeString('fr-FR'):(d.status==='partial'?'Synchronisation partielle':'Services indisponibles');
-    return true;
-  }catch(e){syncText.textContent='Serveur indisponible';syncError.innerHTML='<div class="error">'+esc(e.message)+'</div>';retry.style.display='inline-block';return false}
-}
+function log(text,type='ai'){const d=document.createElement('div');d.className='msg '+type;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;const a=d.cloneNode(true);assistantChat.appendChild(a);assistantChat.scrollTop=assistantChat.scrollHeight;return d}
+function renderMails(rows){$('mails').innerHTML=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.subject||'Sans objet')+'</b><br><small>'+esc(x.from||'')+(x.preview?' — '+esc(x.preview):'')+'</small></span><span class="pill">'+esc(x.label||'MAIL')+'</span></div>').join('')||'<div class="empty">Aucun mail.</div>'}
+function renderEvents(rows,targetId='events'){const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.title||'Sans titre')+'</b><br><small>'+esc(x.start?new Date(x.start).toLocaleString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'')+(x.location?' · '+esc(x.location):'')+'</small></span><span class="pill">AGENDA</span></div>').join('')||'<div class="empty">Aucun événement.</div>';$(targetId).innerHTML=html}
+function renderTasks(rows,targetId='taskPreview'){const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.title||'Sans titre')+'</b><br><small>'+esc(x.due?'Échéance : '+new Date(x.due).toLocaleDateString('fr-FR'):'')+'</small></span><button class="ghost" data-complete="'+esc(x.title||'')+'">✓</button></div>').join('')||'<div class="empty">Aucune tâche.</div>';$(targetId).innerHTML=html;$(targetId).querySelectorAll('[data-complete]').forEach(b=>b.onclick=()=>runCommand('Termine la tâche '+b.dataset.complete))}
+function renderFiles(rows){const html=(rows||[]).map(x=>'<div class="row"><span><b>'+esc(x.name||'Fichier')+'</b><br><small>'+esc(x.modified||'')+'</small></span><span class="pill">DRIVE</span></div>').join('')||'<div class="empty">Aucun fichier.</div>';$('files').innerHTML=html;$('files2').innerHTML=html}
+function connectBox(needs){if(!needs?.length){$('connections').innerHTML='<span class="ok">● Gmail · Drive · Agenda · Tâches synchronisés</span>';return}$('connections').innerHTML=needs.map(p=>'<div class="warn">⚠ '+esc(connectLabels[p]||p)+' non connecté<br><button class="ghost connect" data-connect="'+esc(p)+'">Connecter</button></div>').join('');$('connections').querySelectorAll('[data-connect]').forEach(b=>b.onclick=()=>connectProvider(b.dataset.connect))}
+async function connectProvider(provider){try{const r=await fetch('/api/connect?provider='+encodeURIComponent(provider)+'&t='+Date.now(),{cache:'no-store'});const d=await r.json();if(!r.ok||!d.redirect_url)throw new Error(d.error||'Lien de connexion indisponible');window.open(d.redirect_url,'_blank','noopener,noreferrer');log('Une fenêtre de connexion '+connectLabels[provider]+' vient de s’ouvrir. Termine l’autorisation, puis clique sur « Synchroniser ».')}catch(e){log('Impossible de lancer la connexion : '+e.message)}}
+async function runCommand(value){const q=value.trim();if(!q)return;log(q,'user');cmd.value='';const t=log('Analyse de la commande…','ai');try{const r=await fetch('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:q,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,clientNow:new Date().toISOString()})});const d=await r.json();t.remove();if(!r.ok){if(d.connectProvider){log('Cette fonction nécessite une connexion '+connectLabels[d.connectProvider]+'.');await connectProvider(d.connectProvider);return}throw new Error(d.error||'Erreur serveur')}log(d.message||'Commande exécutée.');const data=d.data||{};if(data.unread!=null)$('unread').textContent=data.unread;if(data.driveCount!=null)$('drive').textContent=data.driveCount;if(data.calendar!=null)$('calendarCount').textContent=data.calendar;if(data.tasks!=null)$('tasksCount').textContent=data.tasks;if(data.mails)renderMails(data.mails);if(data.files)renderFiles(data.files);if(data.events){$('calendarCount').textContent=data.events.length;renderEvents(data.events);renderEvents(data.events,'calendarList')}if(data.tasks)renderTasks(data.tasks);if(data.createdTask||data.completedTask)sync();if(data.createdEvent)sync();await sync()}catch(e){t.remove();log('Erreur : '+e.message)}}
+$('cmdBtn').onclick=()=>runCommand(cmd.value);cmd.addEventListener('keydown',e=>{if(e.key==='Enter')runCommand(cmd.value)});document.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>runCommand(b.dataset.cmd)));
+async function sync(){try{syncText.textContent='Synchronisation…';const r=await fetch('/api/state?t='+Date.now(),{cache:'no-store'});const d=await r.json();if(Number.isFinite(d.unread))$('unread').textContent=d.unread;if(Number.isFinite(d.drive))$('drive').textContent=d.drive;if(Number.isFinite(d.calendar))$('calendarCount').textContent=d.calendar;if(Number.isFinite(d.tasks))$('tasksCount').textContent=d.tasks;renderMails(d.mails||[]);renderEvents(d.events||[]);renderEvents(d.events||[],'calendarList');renderTasks(d.taskItems||[]);renderTasks(d.taskItems||[],'tasksList');renderFiles(d.driveFiles||[]);connectBox(d.needsConnect||[]);const errors=Object.entries(d.errors||{});syncError.innerHTML=errors.map(([k,v])=>'<div class="error">'+esc(k.toUpperCase())+' : '+esc(v)+'</div>').join('');retry.style.display=errors.length?'inline-block':'none';syncText.textContent=d.status==='ok'?'Synchronisé à '+new Date(d.updatedAt).toLocaleTimeString('fr-FR'):(d.status==='partial'?'Synchronisation partielle':'Services indisponibles');return true}catch(e){syncText.textContent='Serveur indisponible';syncError.innerHTML='<div class="error">'+esc(e.message)+'</div>';retry.style.display='inline-block';return false}}
 retry.onclick=sync;
-
-function activate(section){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===section));document.querySelectorAll('[data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===section))}
-document.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',()=>activate(b.dataset.section)));
-
+function activate(section){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===section));document.querySelectorAll('[data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===section));if(window.scrollY>0)window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();activate(b.dataset.section)}));
 sync();setInterval(sync,15000);
-try{
- const es=new EventSource('/api/events');
- es.onopen=()=>sync();
- es.onmessage=e=>{try{const d=JSON.parse(e.data);if(d.type==='state')sync()}catch{}};
- es.onerror=()=>{try{es.close()}catch{}};
-}catch{}
+try{const es=new EventSource('/api/events');es.onopen=()=>sync();es.onmessage=e=>{try{const d=JSON.parse(e.data);if(d.type==='state')sync()}catch{}};es.onerror=()=>{try{es.close()}catch{}}}catch{}
 })();
 </script>
 </body>
