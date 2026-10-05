@@ -2,7 +2,7 @@ const GMAIL_ACCOUNT=process.env.COMPOSIO_GMAIL_ACCOUNT_ID||'gmail_atlas-mare';
 const DRIVE_ACCOUNT=process.env.COMPOSIO_DRIVE_ACCOUNT_ID||'googledrive_viola-waco';
 const KEY=process.env.COMPOSIO_API_KEY;
 const BASE='https://backend.composio.dev/api/v3.1/tools/execute/';
-const ACCOUNT_BASE='https://backend.composio.dev/api/v3.1/connected_accounts/';
+const ACCOUNTS='https://backend.composio.dev/api/v3.1/connected_accounts';
 const userCache=new Map();
 
 function asError(value,fallback){
@@ -17,17 +17,16 @@ function asError(value,fallback){
 
 async function getUserId(account){
   if(userCache.has(account)) return userCache.get(account);
-  const r=await fetch(ACCOUNT_BASE+encodeURIComponent(account),{
-    method:'GET',
-    headers:{'x-api-key':KEY,'accept':'application/json'},
-  });
+  const url=ACCOUNTS+'?connected_account_ids='+encodeURIComponent(account)+'&limit=1';
+  const r=await fetch(url,{headers:{'x-api-key':KEY,'accept':'application/json'}});
   const raw=await r.text();
   let j={};
   try{j=raw?JSON.parse(raw):{}}catch{j={message:raw||'Réponse non JSON'};}
-  if(!r.ok) throw new Error(asError(j.error||j,'Composio connected account '+r.status));
-  if(!j.user_id) throw new Error('Composio connected account: user_id introuvable');
-  userCache.set(account,j.user_id);
-  return j.user_id;
+  if(!r.ok) throw new Error(asError(j.error||j,'Composio connected accounts '+r.status));
+  const item=(j.items||[])[0];
+  if(!item?.user_id) throw new Error('Composio connected account: user_id introuvable');
+  userCache.set(account,item.user_id);
+  return item.user_id;
 }
 
 async function run(slug,account,arguments_){
@@ -37,17 +36,8 @@ async function run(slug,account,arguments_){
     const user_id=await getUserId(account);
     const r=await fetch(BASE+slug,{
       method:'POST',
-      headers:{
-        'x-api-key':KEY,
-        'accept':'application/json',
-        'content-type':'application/json'
-      },
-      body:JSON.stringify({
-        connected_account_id:account,
-        user_id,
-        version:'latest',
-        arguments:arguments_
-      }),
+      headers:{'x-api-key':KEY,'accept':'application/json','content-type':'application/json'},
+      body:JSON.stringify({connected_account_id:account,user_id,version:'latest',arguments:arguments_}),
       signal:controller.signal
     });
     const raw=await r.text();
@@ -71,11 +61,7 @@ export default async function handler(req,res){
     const mail=await run('GMAIL_FETCH_EMAILS',GMAIL_ACCOUNT,{user_id:'me',query:'in:inbox',max_results:8,include_payload:false,verbose:false});
     const messages=unwrap(mail).messages||[];
     out.unread=messages.filter(m=>(m.labelIds||[]).includes('UNREAD')).length;
-    out.mails=messages.slice().sort((a,b)=>Number(b.messageTimestamp||b.internalDate||b.messageTimestampMs||0)-Number(a.messageTimestamp||a.internalDate||a.messageTimestampMs||0)).slice(0,6).map(m=>({
-      subject:m.subject||m.preview?.subject||'(Sans objet)',
-      from:m.sender||m.from||'',
-      label:(m.labelIds||[]).includes('UNREAD')?'NON LU':'MAIL'
-    }));
+    out.mails=messages.slice().sort((a,b)=>Number(b.messageTimestamp||b.internalDate||b.messageTimestampMs||0)-Number(a.messageTimestamp||a.internalDate||a.messageTimestampMs||0)).slice(0,6).map(m=>({subject:m.subject||m.preview?.subject||'(Sans objet)',from:m.sender||m.from||'',label:(m.labelIds||[]).includes('UNREAD')?'NON LU':'MAIL'}));
   }catch(e){out.errors.gmail=asError(e,'Erreur Gmail')}
   try{
     const drive=await run('GOOGLEDRIVE_FIND_FILE',DRIVE_ACCOUNT,{q:'trashed = false',orderBy:'modifiedTime desc',pageSize:8,fields:'files(id,name,mimeType,modifiedTime,webViewLink)'});
