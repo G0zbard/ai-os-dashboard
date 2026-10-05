@@ -19,6 +19,20 @@ async function jsonFetch(url,options={}){
   return j;
 }
 
+async function getOrCreateAuthConfig(toolkit){
+  const configs=await jsonFetch(AUTH_CONFIGS+'?toolkit='+encodeURIComponent(toolkit)+'&show_disabled=false&limit=200');
+  let existing=(configs.items||[]).find(a=>a?.id&&a?.status!=='DISABLED');
+  if(existing?.id) return existing.id;
+  const created=await jsonFetch(AUTH_CONFIGS,{
+    method:'POST',
+    body:JSON.stringify({
+      toolkit:{slug:toolkit},
+      auth_config:{type:'use_composio_managed_auth',credentials:{},restrict_to_following_tools:[]}
+    })
+  });
+  return created?.auth_config?.id||created?.id;
+}
+
 export default async function handler(req,res){
   if(req.method!=='GET') return res.status(405).json({error:'GET only'});
   if(!KEY) return res.status(503).json({configured:false,error:'COMPOSIO_API_KEY is not configured'});
@@ -27,13 +41,10 @@ export default async function handler(req,res){
   if(!toolkit) return res.status(400).json({error:'provider doit être gmail ou drive'});
 
   try{
-    const configs=await jsonFetch(AUTH_CONFIGS+'?toolkit='+encodeURIComponent(toolkit)+'&is_composio_managed=true&show_disabled=false&limit=100');
-    const existing=(configs.items||[]).find(a=>a?.id&&a?.status!=='DISABLED');
-    if(!existing?.id){
-      return res.status(502).json({error:'Auth config introuvable pour '+toolkit,available:(configs.items||[]).map(a=>({id:a?.id||null,status:a?.status||null,toolkit:a?.toolkit?.slug||null}))});
-    }
+    const authConfigId=await getOrCreateAuthConfig(toolkit);
+    if(!authConfigId) throw new Error('Impossible de créer ou trouver la configuration '+toolkit);
     const link=await jsonFetch(LINKS,{method:'POST',body:JSON.stringify({
-      auth_config_id:existing.id,
+      auth_config_id:authConfigId,
       user_id:APP_USER_ID,
       alias:'ai-os-'+provider
     })});
