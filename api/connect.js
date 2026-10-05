@@ -2,7 +2,12 @@ const KEY=process.env.COMPOSIO_API_KEY;
 const APP_USER_ID=process.env.COMPOSIO_APP_USER_ID||'default';
 const AUTH_CONFIGS='https://backend.composio.dev/api/v3.1/auth_configs';
 const LINKS='https://backend.composio.dev/api/v3.1/connected_accounts/link';
-const TOOLKIT_BY_PROVIDER={gmail:'gmail',drive:'googledrive'};
+const TOOLKIT_BY_PROVIDER={
+  gmail:'gmail',
+  drive:'googledrive',
+  calendar:'googlecalendar',
+  tasks:'googletasks'
+};
 
 function err(value,fallback){
   if(typeof value==='string') return value;
@@ -38,8 +43,7 @@ export default async function handler(req,res){
   if(!KEY) return res.status(503).json({configured:false,error:'COMPOSIO_API_KEY is not configured'});
   const provider=String(req.query?.provider||'').toLowerCase();
   const toolkit=TOOLKIT_BY_PROVIDER[provider];
-  if(!toolkit) return res.status(400).json({error:'provider doit être gmail ou drive'});
-
+  if(!toolkit) return res.status(400).json({error:'provider doit être gmail, drive, calendar ou tasks'});
   try{
     const authConfigId=await getOrCreateAuthConfig(toolkit);
     if(!authConfigId) throw new Error('Impossible de créer ou trouver la configuration '+toolkit);
